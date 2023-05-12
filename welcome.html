@@ -19,12 +19,14 @@
     	</ul>
     </div>
 	<div class="wrap-header">
-			<h1>
-            <a href="/" id="title"></a>
-			</h1>
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
 	</div>
 <div id="md" style="display: none;">
 <!-- markdown -->
+![](https://rontrek.github.io/img/image.jpg)
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis diam lectus. Fusce tristique mauris mattis velit scelerisque, non porta diam vulputate. Sed pharetra orci ac turpis laoreet pulvinar. Vivamus rhoncus mauris eu nisl consequat, a sodales augue tempus. Quisque tincidunt a dolor ac porttitor. Aliquam orci ante, vulputate at faucibus faucibus, pulvinar gravida felis. Nunc nunc orci, commodo ac nisl et, molestie efficitur lectus. Ut luctus, ligula sit amet semper porta, ante lectus molestie mauris, ac rutrum libero nunc egestas mauris. Aliquam sed vehicula velit, quis varius tellus. Vestibulum feugiat efficitur risus id sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent in dui a magna elementum scelerisque. Nulla a varius turpis. Nam blandit faucibus dui vel tincidunt. Integer varius nibh ex, id fermentum neque luctus eu. Proin enim nisl, suscipit quis ipsum id, pulvinar rutrum urna.
 
 In blandit neque metus, malesuada interdum nisi pharetra sed. Morbi aliquet libero est. Pellentesque ut nunc eget enim ultrices pellentesque. Nullam scelerisque purus sit amet maximus mattis. Aenean mattis quis mi et pulvinar. Phasellus vestibulum, eros non mattis finibus, neque tortor commodo erat, quis pretium ante quam eget lorem. Etiam mi elit, rhoncus at ornare ultricies, lobortis at turpis. Vestibulum sollicitudin dolor eget vehicula viverra.
@@ -38,6 +40,8 @@ Mauris vitae velit vestibulum, imperdiet elit ullamcorper, condimentum ipsum. Ve
 </div>
 <div class="entry" id="main">
 <!-- content -->
+<p><img src="https://rontrek.github.io/img/image.jpg" alt="" title=""></p>
+
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis diam lectus. Fusce tristique mauris mattis velit scelerisque, non porta diam vulputate. Sed pharetra orci ac turpis laoreet pulvinar. Vivamus rhoncus mauris eu nisl consequat, a sodales augue tempus. Quisque tincidunt a dolor ac porttitor. Aliquam orci ante, vulputate at faucibus faucibus, pulvinar gravida felis. Nunc nunc orci, commodo ac nisl et, molestie efficitur lectus. Ut luctus, ligula sit amet semper porta, ante lectus molestie mauris, ac rutrum libero nunc egestas mauris. Aliquam sed vehicula velit, quis varius tellus. Vestibulum feugiat efficitur risus id sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent in dui a magna elementum scelerisque. Nulla a varius turpis. Nam blandit faucibus dui vel tincidunt. Integer varius nibh ex, id fermentum neque luctus eu. Proin enim nisl, suscipit quis ipsum id, pulvinar rutrum urna.</p>
 
 <p>In blandit neque metus, malesuada interdum nisi pharetra sed. Morbi aliquet libero est. Pellentesque ut nunc eget enim ultrices pellentesque. Nullam scelerisque purus sit amet maximus mattis. Aenean mattis quis mi et pulvinar. Phasellus vestibulum, eros non mattis finibus, neque tortor commodo erat, quis pretium ante quam eget lorem. Etiam mi elit, rhoncus at ornare ultricies, lobortis at turpis. Vestibulum sollicitudin dolor eget vehicula viverra.</p>
@@ -81,23 +85,17 @@ $(document).ready(function() {
         dataType: "json",
         success: function(data) {
             $("#title").html(data.name);
-            var pages = [];
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
             //path
             var path = "welcome.html";
             //path end
             var now = 0;
-            for (var i = 0; i < data.pages.length; ++i)
-                if (path == data.pages[i].path) {
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
                     now = i;
-                    pages.push({"select": true, "path": data.pages[i].path, "title": data.pages[i].title});
-                }
-                else {
-                    pages.push({"select": false, "path": data.pages[i].path, "title": data.pages[i].title});
-                }
-            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
-            var pagesHtml = pagesTemplate.render({"pages": pages});
-            $("#pages").append(pagesHtml);
-            var post = data.pages[now];
+            var post = data.posts[now];
             var tmp = post.tags.split(" ");
             var tags = [];
             for (var i = 0; i < tmp.length; ++i)
@@ -117,7 +115,7 @@ $(document).ready(function() {
         }
     });
 });
-</script>
+</script>	
 <script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
